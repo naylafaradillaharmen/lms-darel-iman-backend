@@ -67,140 +67,161 @@ func main() {
 
 	// Routes
 	r.Route("/api/v1", func(r chi.Router) {
-		// Public Auth
+		// =========================================================================
+		// 1. PUBLIC ROUTES (Tanpa Autentikasi)
+		// =========================================================================
 		r.Post("/auth/login", authH.Login)
-
-		// 1. Kurikulum & Mapel
-		r.Get("/curriculum/subjects", currH.ListSubjects)
-		r.Post("/curriculum/subjects", currH.CreateSubject)
-		r.Get("/curriculum/course-classes", currH.ListCourseClasses)
-		r.Post("/curriculum/course-classes", currH.CreateCourseClass)
-		r.Get("/curriculum/schedules/classroom/{classroom_id}", currH.GetClassroomSchedules)
-
-		// 2. Ruang Kelas LMS & Materi
-		r.Get("/lms/my-courses", lmsH.MyCourses)
-		r.Get("/lms/courses/{course_class_id}/topics", lmsH.GetTopics)
-		r.Post("/lms/courses/{course_class_id}/topics", lmsH.CreateTopic)
-		r.Post("/lms/topics/{topic_id}/materials", lmsH.AddMaterial)
-		r.Put("/lms/topics/{topic_id}/publish", lmsH.TogglePublishTopic)
-
-		// 3. Tugas & Submission
-		r.Post("/assignments/topics/{topic_id}/assignments", asgH.CreateAssignment)
-		r.Get("/assignments/{assignment_id}", asgH.GetAssignment)
-		r.Post("/assignments/{assignment_id}/submit", asgH.SubmitAssignment)
-		r.Get("/assignments/{assignment_id}/submissions", asgH.GetSubmissions)
-		r.Put("/assignments/submissions/{submission_id}/grade", asgH.GradeSubmission)
-
-		// 4. Presensi KBM
-		r.Post("/attendances/courses/{course_class_id}/sessions", attH.CreateSession)
-		r.Get("/attendances/sessions/{session_id}", attH.GetSession)
-		r.Post("/attendances/sessions/{session_id}/record", attH.RecordAttendance)
-		r.Post("/attendances/sessions/{session_id}/check-in", attH.CheckIn)
-
-		// 5. Halaqah Tahfizh Al-Qur'an
-		r.Get("/tahfizh/groups", thfH.ListGroups)
-		r.Post("/tahfizh/groups", thfH.CreateGroup)
-		r.Post("/tahfizh/groups/{id}/students", thfH.AddStudentToGroup)
-		r.Get("/tahfizh/students/{student_id}/logs", thfH.GetStudentLogs)
-		r.Post("/tahfizh/logs", thfH.RecordLog)
-
-		// 6. Bank Soal, Engine Ujian CBT & Proctoring (Tahap 3)
-		r.Get("/exams/banks", examH.ListQuestionBanks)
-		r.Post("/exams/banks", examH.CreateQuestionBank)
-		r.Post("/exams/banks/{id}/questions", examH.AddQuestion)
-		r.Get("/exams/events", examH.ListExamEvents)
-		r.Post("/exams/events", examH.CreateExamEvent)
-		r.Post("/exams/events/{id}/start", examH.StartExam)
-		r.Post("/exams/attempts/{attempt_id}/answer", examH.SaveAnswer)
-		r.Post("/exams/attempts/{attempt_id}/log-incident", examH.LogProctorIncident)
-		r.Post("/exams/attempts/{attempt_id}/finish", examH.FinishExam)
-		r.Get("/exams/events/{id}/monitoring", examH.ProctorMonitoring)
-
-		// 7. Buku Nilai & Remedial (Tahap 3)
-		r.Get("/grading/courses/{id}/gradebook", gradingH.GetGradebook)
-		r.Post("/grading/courses/{id}/calculate-scores", gradingH.CalculateScores)
-		r.Get("/grading/courses/{id}/remedial-candidates", gradingH.GetRemedialCandidates)
-		r.Post("/grading/courses/{id}/lock-grades", gradingH.LockGrades)
-
-		// 8. E-Rapor Digital & Verifikasi QR Publik (Tahap 3)
-		r.Post("/report-cards/generate-batch", reportH.GenerateBatch)
-		r.Get("/report-cards/student/{student_id}/semester/{year_id}", reportH.GetStudentReportCard)
-		r.Get("/report-cards/verify/{qr_code}", reportH.VerifyQRCode)
-
-		// 9. PPDB Online Publik & Panitia (Tahap 4)
 		r.Get("/ppdb/periods/active", ppdbH.GetActivePeriod)
 		r.Post("/ppdb/register", ppdbH.Register)
-		r.Post("/ppdb/{registration_id}/documents", ppdbH.UploadDocument)
-		r.Get("/ppdb/my-status", ppdbH.GetMyStatus)
-		r.Get("/ppdb/admin/registrations", ppdbH.ListRegistrations)
-		r.Put("/ppdb/admin/registrations/{id}/verify", ppdbH.VerifyRegistration)
-		r.Post("/ppdb/admin/registrations/{id}/accept-and-convert", ppdbH.AcceptAndConvert)
+		r.Get("/report-cards/verify/{qr_code}", reportH.VerifyQRCode)
 
-		// 10. Manajemen Keuangan & SPP (Tahap 4)
-		r.Get("/finance/overview", financeH.GetOverview)
-		r.Get("/finance/tariffs", financeH.ListTariffs)
-		r.Post("/finance/invoices/generate-monthly", financeH.GenerateMonthlyInvoices)
-		r.Get("/finance/invoices/student/{student_id}", financeH.GetStudentInvoices)
-		r.Post("/finance/invoices/{id}/pay", financeH.PayInvoice)
-		r.Get("/finance/payments/pending", financeH.GetPendingPayments)
-		r.Put("/finance/payments/{id}/verify", financeH.VerifyPayment)
-		r.Get("/finance/scholarships", financeH.ListScholarships)
-		r.Post("/finance/scholarships", financeH.GrantScholarship)
-
-		// 11. Integrasi & Ekspor Dapodik Kemendikbudristek (Tahap 4)
-		r.Get("/dapodik/validation-check", dapodikH.ValidationCheck)
-		r.Get("/dapodik/export-students", dapodikH.ExportStudents)
-		r.Post("/dapodik/export-students", dapodikH.ExportStudents)
-		r.Get("/dapodik/export-tutors", dapodikH.ExportTutors)
-		r.Post("/dapodik/export-tutors", dapodikH.ExportTutors)
-		r.Get("/dapodik/export-classrooms", dapodikH.ExportClassrooms)
-		r.Post("/dapodik/export-classrooms", dapodikH.ExportClassrooms)
-		r.Get("/dapodik/logs", dapodikH.GetLogs)
-
-		// 12. Kemitraan Pesantren & Komunitas Diaspora (Tahap 5)
-		r.Get("/partners", partnerH.ListPartners)
-		r.Post("/partners", partnerH.CreatePartner)
-		r.Get("/partners/{id}/students", partnerH.GetPartnerStudents)
-		r.Post("/partners/{id}/bulk-enroll", partnerH.BulkEnrollPartnerStudents)
-		r.Get("/partners/analytics/diaspora-map", partnerH.GetDiasporaMap)
-
-		// 13. Penjaminan Mutu, Akreditasi BAN-PDM & BSC (Tahap 5)
-		r.Get("/quality/accreditation/checklist", qualityH.GetAccreditationChecklist)
-		r.Put("/quality/accreditation/items/{id}", qualityH.UpdateAccreditationItem)
-		r.Get("/quality/sops", qualityH.ListSOPs)
-		r.Post("/quality/sops", qualityH.CreateSOP)
-		r.Get("/quality/risks", qualityH.ListRisks)
-		r.Post("/quality/risks", qualityH.CreateRisk)
-		r.Get("/quality/bsc/dashboard", qualityH.GetBSCDashboard)
-
-		// 14. Asisten Cerdas Tutor AI (Tahap 5)
-		r.Post("/ai-tutor/sessions", aiTutorH.CreateSession)
-		r.Post("/ai-tutor/sessions/{id}/ask", aiTutorH.AskAI)
-		r.Get("/ai-tutor/sessions/{id}/history", aiTutorH.GetSessionHistory)
-
-		// Protected Routes
+		// =========================================================================
+		// 2. PROTECTED ROUTES (Wajib Token JWT Valid)
+		// =========================================================================
 		r.Group(func(r chi.Router) {
 			r.Use(middleware.AuthMiddleware(cfg.JWTSecret))
 
+			// Profil & Sesi
 			r.Get("/auth/me", authH.Me)
 
-			// Master & Institution
-			r.Get("/master/overview", instH.GetOverview)
-			r.Get("/master/academic-years", instH.GetAcademicYears)
+			// ---------------------------------------------------------------------
+			// A. AKSES UMUM TERAUTENTIKASI (Siswa, Tutor, Operator, Admin)
+			// ---------------------------------------------------------------------
+			r.Get("/curriculum/subjects", currH.ListSubjects)
+			r.Get("/curriculum/course-classes", currH.ListCourseClasses)
+			r.Get("/curriculum/schedules/classroom/{classroom_id}", currH.GetClassroomSchedules)
+			r.Get("/lms/my-courses", lmsH.MyCourses)
+			r.Get("/lms/courses/{course_class_id}/topics", lmsH.GetTopics)
+			r.Get("/assignments/{assignment_id}", asgH.GetAssignment)
+			r.Get("/attendances/sessions/{session_id}", attH.GetSession)
+			r.Get("/tahfizh/groups", thfH.ListGroups)
+			r.Get("/tahfizh/students/{student_id}/logs", thfH.GetStudentLogs)
+			r.Get("/exams/events", examH.ListExamEvents)
+			r.Get("/report-cards/student/{student_id}/semester/{year_id}", reportH.GetStudentReportCard)
+			r.Get("/finance/tariffs", financeH.ListTariffs)
+			r.Get("/finance/invoices/student/{student_id}", financeH.GetStudentInvoices)
+			r.Post("/finance/invoices/{id}/pay", financeH.PayInvoice)
+			r.Get("/finance/scholarships", financeH.ListScholarships)
+			r.Get("/ppdb/my-status", ppdbH.GetMyStatus)
+			r.Post("/ppdb/{registration_id}/documents", ppdbH.UploadDocument)
 
-			// Tutors
-			r.Get("/tutors", tutorH.List)
-			r.Post("/tutors", tutorH.Create)
+			// AI Tutor (Akses santri & pendidik)
+			r.Post("/ai-tutor/sessions", aiTutorH.CreateSession)
+			r.Post("/ai-tutor/sessions/{id}/ask", aiTutorH.AskAI)
+			r.Get("/ai-tutor/sessions/{id}/history", aiTutorH.GetSessionHistory)
 
-			// Students
-			r.Get("/students", studentH.List)
-			r.Post("/students", studentH.Create)
-			r.Post("/students/bulk-import", studentH.BulkImportCSV)
+			// ---------------------------------------------------------------------
+			// B. KHUSUS SANTRI / SISWA (Ujian CBT & Presensi Mandiri)
+			// ---------------------------------------------------------------------
+			r.Group(func(r chi.Router) {
+				r.Use(middleware.RequireRole("SISWA"))
 
-			// Classrooms
-			r.Get("/classrooms", classH.List)
-			r.Post("/classrooms", classH.Create)
-			r.Post("/classrooms/{id}/students", classH.AssignStudent)
+				r.Post("/exams/events/{id}/start", examH.StartExam)
+				r.Post("/exams/attempts/{attempt_id}/answer", examH.SaveAnswer)
+				r.Post("/exams/attempts/{attempt_id}/log-incident", examH.LogProctorIncident)
+				r.Post("/exams/attempts/{attempt_id}/finish", examH.FinishExam)
+				r.Post("/assignments/{assignment_id}/submit", asgH.SubmitAssignment)
+				r.Post("/attendances/sessions/{session_id}/check-in", attH.CheckIn)
+			})
+
+			// ---------------------------------------------------------------------
+			// C. KHUSUS PENDIDIK / TUTOR & OPERATOR (LMS, Asesmen, Gradebook, Mutu)
+			// ---------------------------------------------------------------------
+			r.Group(func(r chi.Router) {
+				r.Use(middleware.RequireRole("TUTOR", "OPERATOR"))
+
+				// LMS & Materi
+				r.Post("/curriculum/subjects", currH.CreateSubject)
+				r.Post("/curriculum/course-classes", currH.CreateCourseClass)
+				r.Post("/lms/courses/{course_class_id}/topics", lmsH.CreateTopic)
+				r.Post("/lms/topics/{topic_id}/materials", lmsH.AddMaterial)
+				r.Put("/lms/topics/{topic_id}/publish", lmsH.TogglePublishTopic)
+
+				// Tugas & Presensi
+				r.Post("/assignments/topics/{topic_id}/assignments", asgH.CreateAssignment)
+				r.Get("/assignments/{assignment_id}/submissions", asgH.GetSubmissions)
+				r.Put("/assignments/submissions/{submission_id}/grade", asgH.GradeSubmission)
+				r.Post("/attendances/courses/{course_class_id}/sessions", attH.CreateSession)
+				r.Post("/attendances/sessions/{session_id}/record", attH.RecordAttendance)
+
+				// Halaqah Tahfizh
+				r.Post("/tahfizh/groups", thfH.CreateGroup)
+				r.Post("/tahfizh/groups/{id}/students", thfH.AddStudentToGroup)
+				r.Post("/tahfizh/logs", thfH.RecordLog)
+
+				// Bank Soal & Pengawasan Ujian (Tutor/Admin Only)
+				r.Get("/exams/banks", examH.ListQuestionBanks)
+				r.Post("/exams/banks", examH.CreateQuestionBank)
+				r.Post("/exams/banks/{id}/questions", examH.AddQuestion)
+				r.Post("/exams/events", examH.CreateExamEvent)
+				r.Get("/exams/events/{id}/monitoring", examH.ProctorMonitoring)
+
+				// Gradebook & Kunci Nilai Rapor
+				r.Get("/grading/courses/{id}/gradebook", gradingH.GetGradebook)
+				r.Post("/grading/courses/{id}/calculate-scores", gradingH.CalculateScores)
+				r.Get("/grading/courses/{id}/remedial-candidates", gradingH.GetRemedialCandidates)
+				r.Post("/grading/courses/{id}/lock-grades", gradingH.LockGrades)
+				r.Post("/report-cards/generate-batch", reportH.GenerateBatch)
+
+				// Akreditasi & SOP Mutu
+				r.Get("/quality/accreditation/checklist", qualityH.GetAccreditationChecklist)
+				r.Put("/quality/accreditation/items/{id}", qualityH.UpdateAccreditationItem)
+				r.Get("/quality/sops", qualityH.ListSOPs)
+				r.Post("/quality/sops", qualityH.CreateSOP)
+				r.Get("/quality/risks", qualityH.ListRisks)
+				r.Post("/quality/risks", qualityH.CreateRisk)
+			})
+
+			// ---------------------------------------------------------------------
+			// D. KHUSUS STAF OPERATOR & SUPER ADMIN (Master Data, PPDB, Dapodik, Kemitraan)
+			// ---------------------------------------------------------------------
+			r.Group(func(r chi.Router) {
+				r.Use(middleware.RequireRole("OPERATOR"))
+
+				// Master Data & Rombel
+				r.Get("/master/overview", instH.GetOverview)
+				r.Get("/master/academic-years", instH.GetAcademicYears)
+				r.Get("/tutors", tutorH.List)
+				r.Post("/tutors", tutorH.Create)
+				r.Get("/students", studentH.List)
+				r.Post("/students", studentH.Create)
+				r.Post("/students/bulk-import", studentH.BulkImportCSV)
+				r.Get("/classrooms", classH.List)
+				r.Post("/classrooms", classH.Create)
+				r.Post("/classrooms/{id}/students", classH.AssignStudent)
+
+				// PPDB Panitia
+				r.Get("/ppdb/admin/registrations", ppdbH.ListRegistrations)
+				r.Put("/ppdb/admin/registrations/{id}/verify", ppdbH.VerifyRegistration)
+				r.Post("/ppdb/admin/registrations/{id}/accept-and-convert", ppdbH.AcceptAndConvert)
+
+				// Sinkronisasi Dapodik Kemendikbudristek
+				r.Get("/dapodik/validation-check", dapodikH.ValidationCheck)
+				r.Get("/dapodik/export-students", dapodikH.ExportStudents)
+				r.Post("/dapodik/export-students", dapodikH.ExportStudents)
+				r.Get("/dapodik/export-tutors", dapodikH.ExportTutors)
+				r.Post("/dapodik/export-tutors", dapodikH.ExportTutors)
+				r.Get("/dapodik/export-classrooms", dapodikH.ExportClassrooms)
+				r.Post("/dapodik/export-classrooms", dapodikH.ExportClassrooms)
+				r.Get("/dapodik/logs", dapodikH.GetLogs)
+
+				// Kemitraan Pesantren & Komunitas Diaspora
+				r.Get("/partners", partnerH.ListPartners)
+				r.Post("/partners", partnerH.CreatePartner)
+				r.Get("/partners/{id}/students", partnerH.GetPartnerStudents)
+				r.Post("/partners/{id}/bulk-enroll", partnerH.BulkEnrollPartnerStudents)
+				r.Get("/partners/analytics/diaspora-map", partnerH.GetDiasporaMap)
+
+				// Executive BSC Dashboard
+				r.Get("/quality/bsc/dashboard", qualityH.GetBSCDashboard)
+
+				// Administrasi Keuangan SPP & Rekonsiliasi Kas (Bendahara/Operator/Admin)
+				r.Get("/finance/overview", financeH.GetOverview)
+				r.Post("/finance/invoices/generate-monthly", financeH.GenerateMonthlyInvoices)
+				r.Get("/finance/payments/pending", financeH.GetPendingPayments)
+				r.Put("/finance/payments/{id}/verify", financeH.VerifyPayment)
+				r.Post("/finance/scholarships", financeH.GrantScholarship)
+			})
 		})
 	})
 
