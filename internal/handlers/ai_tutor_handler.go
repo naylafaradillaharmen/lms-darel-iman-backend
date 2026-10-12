@@ -199,5 +199,5 @@ func generateDarElImanAIResponse(q string) (string, string) {
 	}
 
 	return fmt.Sprintf("Alhamdulillah, pertanyaan ananda mengenai *\"%s\"* adalah topik pembelajaran yang sangat berbobot.\n\n"+
-		"Berdasarkan silabus Kurikulum PKBM Digital Dar El Iman, pastikan ananda menelaah materi pada modul topik terkait di Ruang LMS, mencatat poin-poin penting, dan jika membutuhkan bimbingan langsung, ananda dapat berdiskusi pada sesi KBM daring berikutnya atau menekan tombol *'Tanyakan ke Ustadz Nyata'*. Semoga Allah memberkahi proses tholabul 'ilmi ananda!", q), "Sistem Pembelajaran Mandiri Terpadu PKBM Dar El Iman"
+		"Berdasarkan silabus Kurikulum PKBM Digital Dar El Iman, pastikan ananda menelaah materi pada modul topik terkait di Ruang LMS, mencatat poin-poin penting, dan jika membutuhkan bimbingan langsung, ananda dapat berdiskusi pada sesi KBM daring berikutnya atau menekan tombol *'Konsultasi Bersama Ustadz Pembimbing'*. Semoga Allah memberkahi proses tholabul 'ilmi ananda!", q), "Sistem Pembelajaran Mandiri Terpadu PKBM Dar El Iman"
 }
