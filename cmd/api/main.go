@@ -83,6 +83,7 @@ func main() {
 
 			// Profil & Sesi
 			r.Get("/auth/me", authH.Me)
+			r.Post("/auth/change-password", authH.ChangePassword)
 
 			// ---------------------------------------------------------------------
 			// A. AKSES UMUM TERAUTENTIKASI (Siswa, Tutor, Operator, Admin)
