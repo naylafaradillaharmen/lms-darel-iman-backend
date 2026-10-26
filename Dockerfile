@@ -3,18 +3,15 @@ FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
-# Install git and certs
-RUN apk add --no-cache git ca-certificates
+RUN apk add --no-cache git ca-certificates tzdata
 
-# Copy go mod and sum
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy source code
 COPY . .
 
-# Build binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server ./cmd/server
+# CGO_ENABLED=0 menghasilkan static binary murni tanpa dependensi C, kompatibel 100% dengan Linux ARM64 (aarch64) dan AMD64 di Easypanel
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o /app/server ./cmd/server
 
 # Final stage
 FROM alpine:3.20
