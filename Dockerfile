@@ -1,4 +1,4 @@
-﻿# Build stage
+# Build stage
 FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN go mod download
 COPY . .
 
 # Build binary
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server ./cmd/api
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server ./cmd/server
 
 # Final stage
 FROM alpine:3.20

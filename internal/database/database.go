@@ -19,7 +19,7 @@ type Database struct {
 }
 
 func Connect(cfg *config.Config) (*Database, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=true&loc=Local&multiStatements=true",
 		cfg.DBUser, cfg.DBPassword, cfg.DBHost, cfg.DBPort, cfg.DBName)
 
 	gormDB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
@@ -40,5 +40,9 @@ func Connect(cfg *config.Config) (*Database, error) {
 	}
 
 	log.Println("Alhamdulillah! Berhasil terhubung ke database MySQL (GORM) PKBM Digital Dar El Iman.")
+
+	// Eksekusi Auto-Migrate skema dan master data saat startup / deploy
+	_ = RunAutoMigrate(gormDB)
+
 	return &Database{GormDB: gormDB, SqlDB: sqlDB}, nil
 }
