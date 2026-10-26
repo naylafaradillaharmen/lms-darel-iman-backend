@@ -47,6 +47,15 @@ func NewAttendanceHandler(db *sql.DB) *AttendanceHandler {
 				Notes:          &note,
 				RecordedAt:     time.Now(),
 			},
+			{
+				ID:             "att00002-0000-0000-0000-000000000002",
+				ClassSessionID: "sess0001-0000-0000-0000-000000000001",
+				StudentID:      "s0000002-0000-0000-0000-000000000002",
+				StudentName:    "Ahmad Zaki",
+				Status:         "LATE",
+				Notes:          func(s string) *string { return &s }("Santri hadir terlambat 15 menit (Presensi 70%)"),
+				RecordedAt:     time.Now(),
+			},
 		},
 	}
 	return h

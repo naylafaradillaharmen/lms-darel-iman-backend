@@ -2,7 +2,7 @@ package models
 
 import "time"
 
-// Partner mewakili institusi mitra (pesantren, majelis taklim, komunitas diaspora)
+// Partner mewakili lembaga mitra (pesantren, majelis taklim, komunitas diaspora luar negeri)
 type Partner struct {
 	ID            string    `json:"id"`
 	Name          string    `json:"name"`
@@ -13,11 +13,11 @@ type Partner struct {
 	Phone         string    `json:"phone"`
 	Email         string    `json:"email"`
 	IsActive      bool      `json:"is_active"`
-	StudentCount  int       `json:"student_count,omitempty"`
 	CreatedAt     time.Time `json:"created_at"`
+	StudentCount  int       `json:"student_count,omitempty"`
 }
 
-// PartnerStudent mewakili relasi santri di bawah naungan mitra
+// PartnerStudent relasi antara lembaga mitra dan santri binaan
 type PartnerStudent struct {
 	PartnerID    string    `json:"partner_id"`
 	StudentID    string    `json:"student_id"`
@@ -28,18 +28,18 @@ type PartnerStudent struct {
 	RegisteredAt time.Time `json:"registered_at"`
 }
 
-// AccreditationStandard mewakili 8 standar akreditasi BAN-PDM
+// AccreditationStandard mewakili 8 Standar Nasional Pendidikan (BAN-PDM)
 type AccreditationStandard struct {
 	ID            string              `json:"id"`
-	Code          string              `json:"code"`
+	Code          string              `json:"code"` // BAN-PDM-01 s/d BAN-PDM-08
 	StandardName  string              `json:"standard_name"`
 	ComponentName string              `json:"component_name"`
 	MaxScore      float64             `json:"max_score"`
-	Items         []AccreditationItem `json:"items,omitempty"`
 	CreatedAt     time.Time           `json:"created_at"`
+	Items         []AccreditationItem `json:"items,omitempty"`
 }
 
-// AccreditationItem mewakili butir instrumen eviden akreditasi
+// AccreditationItem mewakili butir instrumen akreditasi dan bukti fisik eviden
 type AccreditationItem struct {
 	ID                   string    `json:"id"`
 	StandardID           string    `json:"standard_id"`
@@ -52,7 +52,7 @@ type AccreditationItem struct {
 	UpdatedAt            time.Time `json:"updated_at"`
 }
 
-// InstitutionSOP mewakili katalog Standar Operasional Prosedur lembaga
+// InstitutionSOP mewakili Standar Operasional Prosedur kelembagaan
 type InstitutionSOP struct {
 	ID            string    `json:"id"`
 	Code          string    `json:"code"`
@@ -64,7 +64,7 @@ type InstitutionSOP struct {
 	CreatedAt     time.Time `json:"created_at"`
 }
 
-// RiskRegister mewakili pemetaan risiko mutu dan mitigasi
+// RiskRegister mewakili register risiko mutu & operasional
 type RiskRegister struct {
 	ID             string    `json:"id"`
 	RiskTitle      string    `json:"risk_title"`
@@ -77,20 +77,20 @@ type RiskRegister struct {
 	CreatedAt      time.Time `json:"created_at"`
 }
 
-// BSCIndicator mewakili indikator Balanced Scorecard
+// BSCIndicator mewakili indikator Balanced Scorecard 4 perspektif
 type BSCIndicator struct {
-	ID            string    `json:"id"`
-	Perspective   string    `json:"perspective"` // FINANCIAL, CUSTOMER_STAKEHOLDER, INTERNAL_PROCESS, LEARNING_GROWTH
-	IndicatorName string    `json:"indicator_name"`
-	TargetValue   float64   `json:"target_value"`
-	CurrentValue  float64   `json:"current_value"`
-	Unit          string    `json:"unit"`
-	PeriodYear    int       `json:"period_year"`
-	AchievementPct float64  `json:"achievement_pct"`
-	UpdatedAt     time.Time `json:"updated_at"`
+	ID             string    `json:"id"`
+	Perspective    string    `json:"perspective"` // FINANCIAL, CUSTOMER_STAKEHOLDER, INTERNAL_PROCESS, LEARNING_GROWTH
+	IndicatorName  string    `json:"indicator_name"`
+	TargetValue    float64   `json:"target_value"`
+	CurrentValue   float64   `json:"current_value"`
+	Unit           string    `json:"unit"` // %, Orang, Rp, Skor
+	PeriodYear     int       `json:"period_year"`
+	AchievementPct float64   `json:"achievement_pct,omitempty"`
+	UpdatedAt      time.Time `json:"updated_at"`
 }
 
-// BSCDashboardSummary mewakili ringkasan eksekutif 4 perspektif BSC
+// BSCDashboardSummary ringkasan eksekutif Balanced Scorecard
 type BSCDashboardSummary struct {
 	FinancialScore       float64        `json:"financial_score"`
 	CustomerScore        float64        `json:"customer_score"`
@@ -100,35 +100,16 @@ type BSCDashboardSummary struct {
 	Indicators           []BSCIndicator `json:"indicators"`
 }
 
-// DiasporaCountryRecord mewakili titik sebaran santri per negara/zona waktu
-type DiasporaCountryRecord struct {
-	CountryCode  string `json:"country_code"`
-	CountryName  string `json:"country_name"`
-	StudentCount int    `json:"student_count"`
-	Timezone     string `json:"timezone"`
-	FlagEmoji    string `json:"flag_emoji"`
-}
-
-// DiasporaMapSummary mewakili agregasi persebaran santri global
-type DiasporaMapSummary struct {
-	TotalStudents   int                     `json:"total_students"`
-	NationalCount   int                     `json:"national_count"`
-	DiasporaCount   int                     `json:"diaspora_count"`
-	CountriesCount  int                     `json:"countries_count"`
-	Countries       []DiasporaCountryRecord `json:"countries"`
-}
-
-// AIChatSession mewakili sesi tanya jawab santri dengan Tutor AI
+// AIChatSession mewakili sesi tanya jawab belajar santri dengan Tutor AI
 type AIChatSession struct {
-	ID          string          `json:"id"`
-	StudentID   string          `json:"student_id"`
-	SubjectID   *string         `json:"subject_id,omitempty"`
-	SubjectName string          `json:"subject_name,omitempty"`
-	StartedAt   time.Time       `json:"started_at"`
-	Messages    []AIChatMessage `json:"messages,omitempty"`
+	ID          string    `json:"id"`
+	StudentID   string    `json:"student_id"`
+	SubjectID   *string   `json:"subject_id,omitempty"`
+	SubjectName string    `json:"subject_name,omitempty"`
+	StartedAt   time.Time `json:"started_at"`
 }
 
-// AIChatMessage mewakili pesan interaksi chat AI
+// AIChatMessage mewakili pesan tanya jawab chat AI
 type AIChatMessage struct {
 	ID         string    `json:"id"`
 	SessionID  string    `json:"session_id"`
@@ -137,16 +118,47 @@ type AIChatMessage struct {
 	CreatedAt  time.Time `json:"created_at"`
 }
 
-// AIChatAskRequest permintaan tanya materi belajar ke Tutor AI
+// AIChatAskRequest permintaan tanya jawab AI
 type AIChatAskRequest struct {
-	Question  string `json:"question"`
-	SubjectID string `json:"subject_id,omitempty"`
+	Question string `json:"question,omitempty"`
+	Prompt   string `json:"prompt,omitempty"`
 }
 
-// AIChatAskResponse respon jawaban pintar dari Tutor AI
+// AIChatAskResponse respon tanya jawab AI
 type AIChatAskResponse struct {
-	SessionID string `json:"session_id"`
-	Answer    string `json:"answer"`
-	Source    string `json:"source"`
-	Timestamp string `json:"timestamp"`
+	SessionID string        `json:"session_id"`
+	Answer    string        `json:"answer,omitempty"`
+	Source    string        `json:"source,omitempty"`
+	Timestamp string        `json:"timestamp,omitempty"`
+	UserMsg   AIChatMessage `json:"user_msg,omitempty"`
+	ReplyMsg  AIChatMessage `json:"reply_msg,omitempty"`
+}
+
+// DiasporaMapData struktur untuk peta visual sebaran santri dunia & nasional
+type DiasporaMapData struct {
+	Country      string  `json:"country"`
+	City         string  `json:"city"`
+	Timezone     string  `json:"timezone"`
+	TotalStudent int     `json:"total_student"`
+	Latitude     float64 `json:"latitude"`
+	Longitude    float64 `json:"longitude"`
+	FlagEmoji    string  `json:"flag_emoji"`
+}
+
+// DiasporaCountryRecord rekor negara sebaran santri
+type DiasporaCountryRecord struct {
+	CountryCode  string `json:"country_code"`
+	CountryName  string `json:"country_name"`
+	StudentCount int    `json:"student_count"`
+	Timezone     string `json:"timezone"`
+	FlagEmoji    string `json:"flag_emoji"`
+}
+
+// DiasporaMapSummary ringkasan agregasi diaspora
+type DiasporaMapSummary struct {
+	TotalStudents  int                     `json:"total_students"`
+	NationalCount  int                     `json:"national_count"`
+	DiasporaCount  int                     `json:"diaspora_count"`
+	CountriesCount int                     `json:"countries_count"`
+	Countries      []DiasporaCountryRecord `json:"countries"`
 }

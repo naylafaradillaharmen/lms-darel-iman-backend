@@ -35,7 +35,7 @@ func (h *AITutorHandler) initMockData() {
 	h.sessions = []models.AIChatSession{
 		{
 			ID:          defSessID,
-			StudentID:   "stu-001",
+			StudentID:   "s0000001-0000-0000-0000-000000000001",
 			SubjectName: "Tahfizh & Tajwid Al-Qur'an",
 			StartedAt:   time.Now().Add(-2 * time.Hour),
 		},
@@ -67,7 +67,7 @@ func (h *AITutorHandler) CreateSession(w http.ResponseWriter, r *http.Request) {
 
 	sessID := "sess-ai-" + uuid.New().String()[:8]
 	if req.StudentID == "" {
-		req.StudentID = "stu-001"
+		req.StudentID = "s0000001-0000-0000-0000-000000000001"
 	}
 	if req.SubjectName == "" {
 		req.SubjectName = "Umum & Kepesantrenan"

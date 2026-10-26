@@ -110,7 +110,88 @@ func NewReportCardHandler(db *sql.DB) *ReportCardHandler {
 		},
 	}
 
+	zakiCard := &models.StudentReportCard{
+		ID:                     "rc000002-0000-0000-0000-000000000002",
+		StudentID:              "s0000002-0000-0000-0000-000000000002",
+		StudentName:            "Ahmad Zaki",
+		NIS:                    "NIS-2026-002",
+		NISN:                   ptrString("0089123457"),
+		AcademicYearID:         "22222222-2222-2222-2222-222222222222",
+		AcademicYearName:       "Tahun Ajaran 2026/2027 (Semester Ganjil)",
+		ClassroomID:            "c1111111-1111-1111-1111-111111111111",
+		ClassroomName:          "Kelas X Paket C - Umar bin Khattab",
+		HomeroomNotes:          "Ananda Ahmad Zaki diharapkan lebih disiplin hadir dalam pembelajaran daring dan mengulang kembali kaidah makharijul huruf pada program remedial.",
+		SpiritualBehaviorGrade: "B (Baik)",
+		SocialBehaviorGrade:    "B (Baik)",
+		TahfizhSummary:         "Hafalan Juz 30 berjalan lancar sampai Surah An-Nazi'at, perlu peningkatan kelancaran dan pengulangan muraja'ah mandiri.",
+		QRVerificationCode:     "DEI-RAPOR-2026-X-002",
+		PublishedAt:            &now,
+		Grades: []models.ReportCardGrade{
+			{
+				ID:              "rcg00007-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00001-0000-0000-0000-000000000001",
+				SubjectCode:     "THF-01",
+				SubjectName:     "Tahfizh Al-Qur'an Tematik",
+				NumericalScore:  67.60,
+				LetterGrade:     "C",
+				CompetencyNotes: "Perlu pengayaan makharijul huruf dan penjadwalan remedial asesmen CBT (Di bawah KKM 75).",
+			},
+			{
+				ID:              "rcg00008-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00002-0000-0000-0000-000000000002",
+				SubjectCode:     "ARB-01",
+				SubjectName:     "Bahasa Arab Komunikatif & Nahwu Shorof Dasar",
+				NumericalScore:  70.00,
+				LetterGrade:     "C",
+				CompetencyNotes: "Cukup memahami percakapan dasar bahasa Arab, perlu latihan percakapan.",
+			},
+			{
+				ID:              "rcg00009-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00003-0000-0000-0000-000000000003",
+				SubjectCode:     "AKD-01",
+				SubjectName:     "Akidah & Akhlak Karimah",
+				NumericalScore:  75.00,
+				LetterGrade:     "B",
+				CompetencyNotes: "Memahami materi akidah dan adab penuntut ilmu dengan baik.",
+			},
+			{
+				ID:              "rcg00010-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00004-0000-0000-0000-000000000004",
+				SubjectCode:     "TEC-01",
+				SubjectName:     "AI Literacy & Pemrograman Dasar",
+				NumericalScore:  72.00,
+				LetterGrade:     "C",
+				CompetencyNotes: "Cukup memahami literasi digital dasar.",
+			},
+			{
+				ID:              "rcg00011-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00005-0000-0000-0000-000000000005",
+				SubjectCode:     "IND-10",
+				SubjectName:     "Bahasa Indonesia (Paket C)",
+				NumericalScore:  70.00,
+				LetterGrade:     "C",
+				CompetencyNotes: "Mampu membuat paragraf sederhana bahasa Indonesia.",
+			},
+			{
+				ID:              "rcg00012-0000-0000-0000-000000000002",
+				ReportCardID:    "rc000002-0000-0000-0000-000000000002",
+				SubjectID:       "sub00006-0000-0000-0000-000000000006",
+				SubjectCode:     "MTK-10",
+				SubjectName:     "Matematika Terapan (Paket C)",
+				NumericalScore:  65.00,
+				LetterGrade:     "C",
+				CompetencyNotes: "Perlu bimbingan tambahan dalam operasi aljabar matematika dasar.",
+			},
+		},
+	}
+
 	h.reports["DEI-RAPOR-2026-X-001"] = fatihCard
+	h.reports["DEI-RAPOR-2026-X-002"] = zakiCard
 	return h
 }
 
@@ -130,15 +211,18 @@ func (h *ReportCardHandler) GenerateBatch(w http.ResponseWriter, r *http.Request
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	// Ensure Fatih's report card is in the pool
-	card := h.reports["DEI-RAPOR-2026-X-001"]
 	now := time.Now()
-	card.PublishedAt = &now
+	if c, ok := h.reports["DEI-RAPOR-2026-X-001"]; ok {
+		c.PublishedAt = &now
+	}
+	if c, ok := h.reports["DEI-RAPOR-2026-X-002"]; ok {
+		c.PublishedAt = &now
+	}
 
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"success":       true,
 		"message":       "Batch e-Rapor resmi berhasil digenerate lengkap dengan QR Code Keabsahan",
-		"generated":     1,
+		"generated":     2,
 		"classroom_id":  req.ClassroomID,
 		"academic_year": req.AcademicYearID,
 		"sample_qr":     "DEI-RAPOR-2026-X-001",

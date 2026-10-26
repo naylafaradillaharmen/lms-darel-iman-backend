@@ -77,6 +77,7 @@ type StudentInvoice struct {
 	FinalAmount    float64               `json:"final_amount"`
 	DueDate        string                `json:"due_date"`
 	Status         string                `json:"status"` // UNPAID, PENDING_VERIFICATION, PAID, CANCELLED
+	ReceiptFileURL string                `json:"receipt_file_url,omitempty"`
 	CreatedAt      time.Time             `json:"created_at"`
 	Transactions   []PaymentTransaction  `json:"transactions,omitempty"`
 }
@@ -136,4 +137,43 @@ type DapodikIssueRecord struct {
 	StudentName string `json:"student_name"`
 	NIS         string `json:"nis"`
 	Missing     string `json:"missing"`
+}
+
+// DapodikStudentRow mewakili baris data siswa yang disiapkan untuk Dapodik
+type DapodikStudentRow struct {
+	No                int    `json:"no"`
+	NamaSiswa         string `json:"nama_siswa"`
+	NISN              string `json:"nisn"`
+	NIK               string `json:"nik"`
+	JenisKelamin      string `json:"jenis_kelamin"`
+	TempatLahir       string `json:"tempat_lahir"`
+	TanggalLahir      string `json:"tanggal_lahir"`
+	NamaIbuKandung    string `json:"nama_ibu_kandung"`
+	TingkatPendidikan string `json:"tingkat_pendidikan"`
+	Rombel            string `json:"rombel"`
+	StatusValidasi    string `json:"status_validasi"`
+}
+
+// DapodikTutorRow mewakili baris data PTK / tutor untuk Dapodik
+type DapodikTutorRow struct {
+	No             int    `json:"no"`
+	NamaPTK        string `json:"nama_ptk"`
+	NIP            string `json:"nip"`
+	NUPTK          string `json:"nuptk"`
+	JenisKelamin   string `json:"jenis_kelamin"`
+	TempatLahir    string `json:"tempat_lahir"`
+	TanggalLahir   string `json:"tanggal_lahir"`
+	MataPelajaran  string `json:"mata_pelajaran"`
+	StatusPenugasan string `json:"status_penugasan"`
+}
+
+// DapodikClassroomRow mewakili baris rombel untuk Dapodik
+type DapodikClassroomRow struct {
+	No                 int    `json:"no"`
+	NamaRombel         string `json:"nama_rombel"`
+	TingkatPendidikan  string `json:"tingkat_pendidikan"`
+	Jenjang            string `json:"jenjang"`
+	WaliKelas          string `json:"wali_kelas"`
+	JumlahPesertaDidik int    `json:"jumlah_peserta_didik"`
+	Kurikulum          string `json:"kurikulum"`
 }

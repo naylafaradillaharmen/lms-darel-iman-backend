@@ -39,6 +39,7 @@ type ClassSchedule struct {
 	StartTime     string    `json:"start_time"`
 	EndTime       string    `json:"end_time"`
 	MeetingLink   *string   `json:"meeting_link,omitempty"`
+	IsActive      bool      `json:"is_active"`
 	CreatedAt     time.Time `json:"created_at"`
 }
 
@@ -69,6 +70,10 @@ type TopicMaterial struct {
 type Assignment struct {
 	ID                string                 `json:"id"`
 	CourseTopicID     string                 `json:"course_topic_id"`
+	CourseClassID     string                 `json:"course_class_id,omitempty"`
+	SubjectName       string                 `json:"subject_name,omitempty"`
+	TutorID           string                 `json:"tutor_id,omitempty"`
+	TutorName         string                 `json:"tutor_name,omitempty"`
 	Title             string                 `json:"title"`
 	Instructions      string                 `json:"instructions"`
 	DueDate           string                 `json:"due_date"`
@@ -82,6 +87,10 @@ type Assignment struct {
 type AssignmentSubmission struct {
 	ID                 string     `json:"id"`
 	AssignmentID       string     `json:"assignment_id"`
+	AssignmentTitle    string     `json:"assignment_title,omitempty"`
+	SubjectName        string     `json:"subject_name,omitempty"`
+	TutorID            string     `json:"tutor_id,omitempty"`
+	TutorName          string     `json:"tutor_name,omitempty"`
 	StudentID          string     `json:"student_id"`
 	StudentName        string     `json:"student_name,omitempty"`
 	SubmissionText     *string    `json:"submission_text,omitempty"`
@@ -129,19 +138,43 @@ type TahfizhGroup struct {
 }
 
 type TahfizhLog struct {
-	ID             string    `json:"id"`
-	StudentID      string    `json:"student_id"`
-	StudentName    string    `json:"student_name,omitempty"`
-	TutorID        string    `json:"tutor_id"`
-	TutorName      string    `json:"tutor_name,omitempty"`
-	LogDate        string    `json:"log_date"`
-	Type           string    `json:"type"` // ZIYADAH, MURAJAAH
-	SurahName      string    `json:"surah_name"`
-	StartAyah      int       `json:"start_ayah"`
-	EndAyah        int       `json:"end_ayah"`
-	FluencyScore   *string   `json:"fluency_score,omitempty"` // MUMTAZ, JAYYID_JIDDAN, JAYYID, MAQBUL
-	TajweedScore   *string   `json:"tajweed_score,omitempty"` // MUMTAZ, JAYYID_JIDDAN, JAYYID, MAQBUL
-	AudioRecordURL *string   `json:"audio_record_url,omitempty"`
-	Notes          *string   `json:"notes,omitempty"`
-	CreatedAt      time.Time `json:"created_at"`
+	ID             string     `json:"id"`
+	StudentID      string     `json:"student_id"`
+	StudentName    string     `json:"student_name,omitempty"`
+	TutorID        string     `json:"tutor_id"`
+	TutorName      string     `json:"tutor_name,omitempty"`
+	LogDate        string     `json:"log_date"`
+	Type           string     `json:"type"` // ZIYADAH, MURAJAAH
+	SurahName      string     `json:"surah_name"`
+	StartAyah      int        `json:"start_ayah"`
+	EndAyah        int        `json:"end_ayah"`
+	FluencyScore   *string    `json:"fluency_score,omitempty"` // MUMTAZ, JAYYID_JIDDAN, JAYYID, MAQBUL, MENUNGGU_NILAI
+	TajweedScore   *string    `json:"tajweed_score,omitempty"` // MUMTAZ, JAYYID_JIDDAN, JAYYID, MAQBUL, MENUNGGU_NILAI
+	MakhrajScore   *string    `json:"makhraj_score,omitempty"`
+	AudioRecordURL *string    `json:"audio_record_url,omitempty"`
+	Notes          *string    `json:"notes,omitempty"`
+	Status         string     `json:"status,omitempty"` // MENUNGGU_NILAI, SUDAH_DINILAI
+	EvaluatedAt    *time.Time `json:"evaluated_at,omitempty"`
+	CreatedAt      time.Time  `json:"created_at"`
+}
+
+type AttendanceRecord struct {
+	ID              string    `json:"id"`
+	Date            string    `json:"date"`
+	StudentID       string    `json:"student_id"`
+	StudentName     string    `json:"student_name"`
+	NISN            string    `json:"nisn"`
+	ClassroomID     string    `json:"classroom_id,omitempty"`
+	ClassroomName   string    `json:"classroom_name"`
+	SubjectName     string    `json:"subject_name"`
+	TutorID         string    `json:"tutor_id,omitempty"`
+	TutorName       string    `json:"tutor_name,omitempty"`
+	Status          string    `json:"status"` // HADIR, IZIN, SAKIT, ALPA
+	ApprovalStatus  string    `json:"approval_status,omitempty"` // APPROVED, PENDING, REJECTED
+	Reason          string    `json:"reason,omitempty"`
+	AttachmentURL   string    `json:"attachment_url,omitempty"`
+	RejectionReason string    `json:"rejection_reason,omitempty"`
+	TimeRecorded    string    `json:"time_recorded"`
+	Notes           string    `json:"notes"`
+	CreatedAt       time.Time `json:"created_at"`
 }

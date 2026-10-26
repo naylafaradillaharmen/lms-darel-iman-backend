@@ -64,12 +64,12 @@ func (h *FinanceHandler) initMockData() {
 
 	h.scholarships = []models.ScholarshipGrant{
 		{
-			ID:                 "sch-001",
-			StudentID:          "stu-002",
-			StudentName:        "Aisyah Humaira",
-			ProgramName:        "Beasiswa Tahfizh Berprestasi Dar El Iman",
+			ID:                 "sg000001-0000-0000-0000-000000000001",
+			StudentID:          "s0000001-0000-0000-0000-000000000001",
+			StudentName:        "Muhammad Al-Fatih",
+			ProgramName:        "Beasiswa Santri Huffazh Berprestasi Yayasan Dar El Iman",
 			DiscountPercentage: 100,
-			DonorName:          "Yayasan Dar El Iman Indonesia",
+			DonorName:          "Lembaga Amil Zakat Dar El Iman Padang",
 			IsActive:           true,
 			CreatedAt:          time.Now().Add(-90 * 24 * time.Hour),
 		},
@@ -77,66 +77,104 @@ func (h *FinanceHandler) initMockData() {
 
 	h.invoices = []models.StudentInvoice{
 		{
-			ID:             "inv-2026-10-01",
-			StudentID:      "stu-001",
-			StudentName:    "Fatih Al-Ayyubi",
-			NIS:            "202607001",
-			ClassName:      "Paket C - Kelas 10 Abu Bakar Ash-Shiddiq",
-			InvoiceNumber:  "INV-2026-10-0045",
+			ID:             "inv00001-0000-0000-0000-000000000001",
+			StudentID:      "s0000001-0000-0000-0000-000000000001",
+			StudentName:    "Muhammad Al-Fatih",
+			NIS:            "NIS-2026-001",
+			ClassName:      "Kelas X Paket C - Umar bin Khattab",
+			InvoiceNumber:  "INV-2026-10-0001",
 			Month:          10,
 			Year:           2026,
 			Amount:         350000.0,
 			DiscountAmount: 0.0,
 			FinalAmount:    350000.0,
-			DueDate:        "2026-10-15",
-			Status:         "PENDING_VERIFICATION",
-			CreatedAt:      time.Now().Add(-9 * 24 * time.Hour),
-		},
-		{
-			ID:             "inv-2026-09-01",
-			StudentID:      "stu-001",
-			StudentName:    "Fatih Al-Ayyubi",
-			NIS:            "202607001",
-			ClassName:      "Paket C - Kelas 10 Abu Bakar Ash-Shiddiq",
-			InvoiceNumber:  "INV-2026-09-0012",
-			Month:          9,
-			Year:           2026,
-			Amount:         350000.0,
-			DiscountAmount: 0.0,
-			FinalAmount:    350000.0,
-			DueDate:        "2026-09-15",
+			DueDate:        "2026-10-10",
 			Status:         "PAID",
 			CreatedAt:      time.Now().Add(-40 * 24 * time.Hour),
 		},
 		{
-			ID:             "inv-2026-10-02",
-			StudentID:      "stu-002",
-			StudentName:    "Aisyah Humaira",
-			NIS:            "202607002",
-			ClassName:      "Paket C - Kelas 10 Khadijah",
-			InvoiceNumber:  "INV-2026-10-0046",
+			ID:             "inv00002-0000-0000-0000-000000000001",
+			StudentID:      "s0000001-0000-0000-0000-000000000001",
+			StudentName:    "Muhammad Al-Fatih",
+			NIS:            "NIS-2026-001",
+			ClassName:      "Kelas X Paket C - Umar bin Khattab",
+			InvoiceNumber:  "INV-2026-11-0001",
+			Month:          11,
+			Year:           2026,
+			Amount:         350000.0,
+			DiscountAmount: 0.0,
+			FinalAmount:    350000.0,
+			DueDate:        "2026-11-10",
+			Status:         "PENDING_VERIFICATION",
+			CreatedAt:      time.Now().Add(-9 * 24 * time.Hour),
+		},
+		{
+			ID:             "inv00003-0000-0000-0000-000000000002",
+			StudentID:      "s0000002-0000-0000-0000-000000000002",
+			StudentName:    "Ahmad Zaki",
+			NIS:            "NIS-2026-002",
+			ClassName:      "Kelas X Paket C - Umar bin Khattab",
+			InvoiceNumber:  "INV-2026-10-0002",
 			Month:          10,
 			Year:           2026,
 			Amount:         350000.0,
-			DiscountAmount: 350000.0,
-			FinalAmount:    0.0,
-			DueDate:        "2026-10-15",
+			DiscountAmount: 0.0,
+			FinalAmount:    350000.0,
+			DueDate:        "2026-10-10",
 			Status:         "PAID",
+			CreatedAt:      time.Now().Add(-40 * 24 * time.Hour),
+		},
+		{
+			ID:             "inv00004-0000-0000-0000-000000000002",
+			StudentID:      "s0000002-0000-0000-0000-000000000002",
+			StudentName:    "Ahmad Zaki",
+			NIS:            "NIS-2026-002",
+			ClassName:      "Kelas X Paket C - Umar bin Khattab",
+			InvoiceNumber:  "INV-2026-11-0002",
+			Month:          11,
+			Year:           2026,
+			Amount:         350000.0,
+			DiscountAmount: 0.0,
+			FinalAmount:    350000.0,
+			DueDate:        "2026-11-10",
+			Status:         "UNPAID",
 			CreatedAt:      time.Now().Add(-9 * 24 * time.Hour),
 		},
 	}
 
 	h.transactions = []models.PaymentTransaction{
 		{
-			ID:               "trx-2026-10-01",
-			StudentInvoiceID: "inv-2026-10-01",
-			InvoiceNumber:    "INV-2026-10-0045",
-			StudentName:      "Fatih Al-Ayyubi",
+			ID:               "ptrx0001-0000-0000-0000-000000000001",
+			StudentInvoiceID: "inv00001-0000-0000-0000-000000000001",
+			InvoiceNumber:    "INV-2026-10-0001",
+			StudentName:      "Muhammad Al-Fatih",
 			PaymentMethod:    "BANK_TRANSFER",
 			AmountPaid:       350000.0,
-			ProofFileURL:     "https://cdn.darel-iman.sch.id/spp/bukti_transfer_fatih_okt2026.jpg",
+			ProofFileURL:     "https://cdn.darel-iman.or.id/bukti-transfer/bsi-fatih-okt.jpg",
+			PaymentDate:      time.Now().Add(-10 * 24 * time.Hour),
+			Status:           "APPROVED",
+		},
+		{
+			ID:               "ptrx0002-0000-0000-0000-000000000001",
+			StudentInvoiceID: "inv00002-0000-0000-0000-000000000001",
+			InvoiceNumber:    "INV-2026-11-0001",
+			StudentName:      "Muhammad Al-Fatih",
+			PaymentMethod:    "BANK_TRANSFER",
+			AmountPaid:       350000.0,
+			ProofFileURL:     "https://cdn.darel-iman.or.id/bukti-transfer/bsi-fatih-nov.jpg",
 			PaymentDate:      time.Now().Add(-1 * 24 * time.Hour),
 			Status:           "PENDING",
+		},
+		{
+			ID:               "ptrx0003-0000-0000-0000-000000000002",
+			StudentInvoiceID: "inv00003-0000-0000-0000-000000000002",
+			InvoiceNumber:    "INV-2026-10-0002",
+			StudentName:      "Ahmad Zaki",
+			PaymentMethod:    "BANK_TRANSFER",
+			AmountPaid:       350000.0,
+			ProofFileURL:     "https://cdn.darel-iman.or.id/bukti-transfer/bsi-zaki-okt.jpg",
+			PaymentDate:      time.Now().Add(-9 * 24 * time.Hour),
+			Status:           "APPROVED",
 		},
 	}
 }
@@ -199,18 +237,41 @@ func (h *FinanceHandler) GenerateMonthlyInvoices(w http.ResponseWriter, r *http.
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	// In this simulation, generate batch invoices for active students
-	studentsList := []struct {
+	type studentBillingInfo struct {
 		ID        string
 		Name      string
 		NIS       string
 		ClassName string
 		Tariff    float64
-	}{
-		{"stu-001", "Fatih Al-Ayyubi", "202607001", "Paket C - Kelas 10 Abu Bakar", 350000.0},
-		{"stu-002", "Aisyah Humaira", "202607002", "Paket C - Kelas 10 Khadijah", 350000.0},
-		{"stu-003", "Zaid bin Haritsah", "202607003", "Paket B - Kelas 8", 300000.0},
-		{"stu-004", "Hamzah bin Abdul Muthalib", "202607004", "Paket A - Kelas 5", 250000.0},
+	}
+
+	var studentsList []studentBillingInfo
+	if h.DB != nil {
+		rows, err := h.DB.Query(`
+			SELECT s.id, s.full_name, s.nis, COALESCE(c.name, 'Kelas X Paket C - Umar bin Khattab')
+			FROM students s
+			LEFT JOIN classroom_students cs ON s.id = cs.student_id
+			LEFT JOIN classrooms c ON cs.classroom_id = c.id
+			WHERE s.status = 'ACTIVE'
+			ORDER BY s.nis ASC
+		`)
+		if err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				var sb studentBillingInfo
+				sb.Tariff = 350000.0
+				if errScan := rows.Scan(&sb.ID, &sb.Name, &sb.NIS, &sb.ClassName); errScan == nil {
+					studentsList = append(studentsList, sb)
+				}
+			}
+		}
+	}
+
+	if len(studentsList) == 0 {
+		studentsList = []studentBillingInfo{
+			{"s0000001-0000-0000-0000-000000000001", "Muhammad Al-Fatih", "NIS-2026-001", "Kelas X Paket C - Umar bin Khattab", 350000.0},
+			{"s0000002-0000-0000-0000-000000000002", "Ahmad Zaki", "NIS-2026-002", "Kelas X Paket C - Umar bin Khattab", 350000.0},
+		}
 	}
 
 	createdCount := 0

@@ -217,13 +217,13 @@ func NewExamHandler(db *sql.DB) *ExamHandler {
 				RandomizeOptions:   true,
 				PassingScore:       75.0,
 				Status:             "ACTIVE",
-				AttemptsCount:      1,
+				AttemptsCount:      2,
 				CreatedAt:          now.Add(-24 * time.Hour),
 			},
 		},
 	}
 
-	// Pre-seed Fatih's completed attempt
+	// Pre-seed Fatih's completed attempt (Tuntas)
 	started := now.Add(-1 * time.Hour)
 	finished := now.Add(-12 * time.Minute)
 	score := 92.0
@@ -242,6 +242,36 @@ func NewExamHandler(db *sql.DB) *ExamHandler {
 		CheatIncidentCount: 0,
 		CreatedAt:          started,
 	}
+
+	// Pre-seed Ahmad Zaki's completed attempt (Remedial)
+	startedZaki := now.Add(-55 * time.Minute)
+	finishedZaki := now.Add(-5 * time.Minute)
+	scoreZaki := 68.0
+	passedZaki := false
+	h.attempts["att00002-0000-0000-0000-000000000002"] = &models.ExamAttempt{
+		ID:                 "att00002-0000-0000-0000-000000000002",
+		ExamEventID:        "ee000001-0000-0000-0000-000000000001",
+		ExamEventTitle:     "UTS Asesmen Sumatif Tahfizh & Tajwid Semester Ganjil",
+		StudentID:          "s0000002-0000-0000-0000-000000000002",
+		StudentName:        "Ahmad Zaki",
+		StartedAt:          &startedZaki,
+		FinishedAt:         &finishedZaki,
+		Status:             "SUBMITTED",
+		TotalScore:         &scoreZaki,
+		IsPassed:           &passedZaki,
+		CheatIncidentCount: 1,
+		CreatedAt:          startedZaki,
+	}
+
+	// Pre-seed Proctor Incident Log for Ahmad Zaki
+	h.logs = append(h.logs, models.ExamProctorLog{
+		ID:            "log-proc-001",
+		ExamAttemptID: "att00002-0000-0000-0000-000000000002",
+		StudentName:   "Ahmad Zaki",
+		IncidentType:  "TAB_SWITCH",
+		Description:   "Santri terdeteksi berpindah tab browser selama 14 detik saat mengerjakan soal nomor 4.",
+		LoggedAt:      startedZaki.Add(15 * time.Minute),
+	})
 
 	return h
 }

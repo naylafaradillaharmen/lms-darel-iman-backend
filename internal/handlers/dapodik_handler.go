@@ -125,12 +125,37 @@ func (h *DapodikHandler) ExportStudents(w http.ResponseWriter, r *http.Request) 
 		"Status_Peserta_Didik",
 	})
 
-	sampleRows := [][]string{
-		{"REG-2026-001", "Fatih Al-Ayyubi", "202607001", "L", "0081234567", "1371011508080001", "Padang", "2008-08-15", "Khadijah", "Paket C - Kelas 10 Abu Bakar", "Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "Aktif"},
-		{"REG-2026-002", "Aisyah Humaira", "202607002", "P", "0092345678", "1371025010090002", "Bukittinggi", "2009-10-20", "Maryam", "Paket C - Kelas 10 Khadijah", "Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "Aktif"},
-		{"REG-2026-003", "Zaid bin Haritsah", "202607003", "L", "0113456789", "3171032512110003", "Jakarta", "2011-12-25", "Ruqayyah", "Paket B - Kelas 8", "Tingkat 4 (Paket B)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "Aktif"},
-		{"REG-2026-004", "Hamzah bin Abdul Muthalib", "202607004", "L", "0144567890", "1371041005140004", "Solok", "2014-05-10", "Zainab", "Paket A - Kelas 5", "Tingkat 2 (Paket A)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "Aktif"},
-		{"REG-2026-005", "Khalid Al-Walid", "202607005", "L", "0085678901", "9901024503080005", "Riyadh", "2008-04-18", "Aminah", "Paket C - Kelas 10 Abu Bakar", "Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Ya", "Arab Saudi", "Aktif"},
+	var sampleRows [][]string
+	if h.DB != nil {
+		rows, err := h.DB.Query(`
+			SELECT s.id, s.full_name, s.nis, s.gender, COALESCE(s.nisn, '-'), COALESCE(s.nik, '-'),
+			       COALESCE(s.birth_place, 'Padang'), COALESCE(DATE_FORMAT(s.birth_date, '%Y-%m-%d'), '2008-01-01'),
+			       COALESCE(s.mother_name, 'Ibu'), COALESCE(c.name, 'Kelas X Paket C - Umar bin Khattab'),
+			       s.status
+			FROM students s
+			LEFT JOIN classroom_students cs ON s.id = cs.student_id
+			LEFT JOIN classrooms c ON cs.classroom_id = c.id
+			ORDER BY s.nis ASC
+		`)
+		if err == nil {
+			defer rows.Close()
+			for rows.Next() {
+				var id, name, nis, gender, nisn, nik, birthPlace, birthDate, mother, classroom, status string
+				if errScan := rows.Scan(&id, &name, &nis, &gender, &nisn, &nik, &birthPlace, &birthDate, &mother, &classroom, &status); errScan == nil {
+					sampleRows = append(sampleRows, []string{
+						id, name, nis, gender, nisn, nik, birthPlace, birthDate, mother, classroom,
+						"Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", status,
+					})
+				}
+			}
+		}
+	}
+
+	if len(sampleRows) == 0 {
+		sampleRows = [][]string{
+			{"s0000001-0000-0000-0000-000000000001", "Muhammad Al-Fatih", "NIS-2026-001", "L", "0081234567", "1371011508080001", "Padang", "2008-08-15", "Khadijah", "Kelas X Paket C - Umar bin Khattab", "Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "ACTIVE"},
+			{"s0000002-0000-0000-0000-000000000002", "Ahmad Zaki", "NIS-2026-002", "L", "0081234568", "1371011508080002", "Padang", "2008-09-20", "Fatimah", "Kelas X Paket C - Umar bin Khattab", "Tingkat 5 (Paket C)", "Kurikulum Merdeka PKBM", "Tidak", "Indonesia", "ACTIVE"},
+		}
 	}
 
 	for _, row := range sampleRows {
